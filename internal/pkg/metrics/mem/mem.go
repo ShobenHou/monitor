@@ -3,8 +3,8 @@ package mem
 import (
 	"time"
 
-	"github.com/githubzjm/tuo/internal/pkg/metrics"
-	"github.com/githubzjm/tuo/internal/pkg/utils/json"
+	"github.com/ShobenHou/monitor/internal/pkg/metrics"
+	"github.com/ShobenHou/monitor/internal/pkg/utils/json"
 )
 
 type MemStats struct {

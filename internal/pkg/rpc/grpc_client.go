@@ -7,9 +7,9 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
-	"github.com/githubzjm/tuo/internal/pkg/mysql/models"
-	pb "github.com/githubzjm/tuo/internal/pkg/rpc/hello"
-	nm "github.com/githubzjm/tuo/internal/server/nodes"
+	"github.com/ShobenHou/monitor/internal/pkg/mysql/models"
+	pb "github.com/ShobenHou/monitor/internal/pkg/rpc/hello"
+	nm "github.com/ShobenHou/monitor/internal/server/nodes"
 	grpc "google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )

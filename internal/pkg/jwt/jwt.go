@@ -13,7 +13,6 @@ import (
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
-	"github.com/githubzjm/tuo/api/v1/def"
 	"github.com/gorilla/websocket"
 )
 

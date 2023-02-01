@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/githubzjm/tuo/internal/pkg/influxdb/iorm/schema"
+	"github.com/ShobenHou/monitor/internal/pkg/influxdb/iorm/schema"
 	log "github.com/sirupsen/logrus"
 )
 

@@ -6,8 +6,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/ShobenHou/monitor/internal/pkg/mysql/models"
 	"github.com/VividCortex/mysqlerr"
-	"github.com/githubzjm/tuo/internal/pkg/mysql/models"
 
 	// mysql driver, its init func will register itself into database/sql, then can be reached by sql.Open()
 	mysqlDriver "github.com/go-sql-driver/mysql"

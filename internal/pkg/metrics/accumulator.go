@@ -4,7 +4,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/githubzjm/tuo/internal/pkg/influxdb"
+	"github.com/ShobenHou/monitor/internal/pkg/influxdb"
 	"github.com/influxdata/influxdb-client-go/v2/api/write"
 	"github.com/shirou/gopsutil/v3/host"
 	log "github.com/sirupsen/logrus"

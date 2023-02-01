@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"strings"
 
-	jsonUtil "github.com/githubzjm/tuo/internal/pkg/utils/json"
+	jsonUtil "github.com/ShobenHou/monitor/internal/pkg/utils/json"
 )
 
 var HttpClient *http.Client

@@ -8,9 +8,9 @@ import (
 	//    "gopkg.in/yaml.v2"
 	log "github.com/sirupsen/logrus"
 
-	"github.com/githubzjm/tuo/internal/agent"
-	"github.com/githubzjm/tuo/internal/pkg/influxdb"
-	"github.com/githubzjm/tuo/internal/pkg/logger"
+	"github.com/ShobenHou/monitor/internal/agent"
+	"github.com/ShobenHou/monitor/internal/pkg/influxdb"
+	"github.com/ShobenHou/monitor/internal/pkg/logger"
 	//"github.com/githubzjm/tuo/internal/agent/plugin"
 	// "github.com/githubzjm/tuo/internal/agent/config"
 )

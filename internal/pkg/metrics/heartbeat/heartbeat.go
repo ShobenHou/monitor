@@ -3,7 +3,7 @@ package heartbeat
 import (
 	"time"
 
-	"github.com/githubzjm/tuo/internal/pkg/metrics"
+	"github.com/ShobenHou/monitor/internal/pkg/metrics"
 )
 
 type HeartBeat struct {

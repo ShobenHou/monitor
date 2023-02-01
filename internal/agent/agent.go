@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/githubzjm/tuo/internal/pkg/metrics"
-	_ "github.com/githubzjm/tuo/internal/pkg/metrics/all"
-	"github.com/githubzjm/tuo/internal/pkg/rpc"
+	"github.com/ShobenHou/monitor/internal/pkg/metrics"
+	_ "github.com/ShobenHou/monitor/internal/pkg/metrics/all"
+	"github.com/ShobenHou/monitor/internal/pkg/rpc"
 	log "github.com/sirupsen/logrus"
 )
 

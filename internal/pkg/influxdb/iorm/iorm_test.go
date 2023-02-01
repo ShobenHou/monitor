@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/githubzjm/tuo/internal/pkg/influxdb/iorm/schema"
+	"github.com/ShobenHou/monitor/internal/pkg/influxdb/iorm/schema"
 )
 
 type CPU struct {
