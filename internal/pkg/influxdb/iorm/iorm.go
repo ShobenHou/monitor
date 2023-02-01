@@ -82,6 +82,7 @@ func (o *Org) Query(flux string, dest interface{}) (map[string]interface{}, erro
 		return nil, err
 	}
 
+	return nil, err
 }
 
 func (o *Org) AddBucket(name string) {

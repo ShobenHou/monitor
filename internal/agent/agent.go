@@ -6,7 +6,7 @@ import (
 
 	"github.com/ShobenHou/monitor/internal/pkg/metrics"
 	_ "github.com/ShobenHou/monitor/internal/pkg/metrics/all"
-	"github.com/ShobenHou/monitor/internal/pkg/rpc"
+	//"github.com/ShobenHou/monitor/internal/pkg/rpc"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -49,7 +49,7 @@ func (a *Agent) Run(quit chan bool) error {
 	var err error
 	var interval time.Duration
 
-	go rpc.StartGRPCServer(a.Conf.Addr)
+	//TODO: go rpc.StartGRPCServer(a.Conf.Addr)
 
 	acc, err := metrics.NewAccumulator(100)
 	if err != nil {
