@@ -1,0 +1,6 @@
+#copy pub key of control plane to nodes
+cat ~/.ssh/id_rsa.pub | ssh mininet@192.168.174.130 'cat >> .ssh/authorized_keys'
+
+#copy private key of nodes to control plane local
+scp mininet@192.168.174.130:~/.ssh/id_rsa ./node_mininet_key
+ansible-playbook -i inventory.ini agent-playbook.yaml

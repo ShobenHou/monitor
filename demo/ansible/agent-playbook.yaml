@@ -1,0 +1,10 @@
+- hosts: all
+  become: true
+  tasks:
+  - name: Configure agent service
+    copy:
+      src: /home/mininetfrr/git_workspace/monitor/cmd/agent/main
+      dest: /usr/local/bin/agent
+      mode: '0755'
+  - name: Start agent service
+    command: /usr/local/bin/agent
