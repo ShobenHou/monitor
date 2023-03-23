@@ -93,7 +93,7 @@ func main() {
 		},
 		Addr: "localhost:55555",
 	}
-	agent := agent.NewAgent(agentConf)
+	agentInstance := agent.NewAgent(agentConf)
 
 	//TODO：ADDED
 	// Connect to Kafka
@@ -137,7 +137,7 @@ func main() {
 				continue
 			}
 
-			agent.UpdateConfig(newConf)
+			agentInstance.UpdateConfig(newConf)
 			log.Infof("Updated agent configuration: %v", newConf)
 		}
 	}()
@@ -149,7 +149,7 @@ func main() {
 		// otherwise main goroutine will end before the goroutines
 	}()
 
-	err = agent.Run(quit)
+	err = agentInstance.Run(quit)
 	if err != nil {
 		log.Info(err)
 	}
