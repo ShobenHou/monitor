@@ -2,8 +2,11 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"flag"
 	"fmt"
+	"github.com/confluentinc/confluent-kafka-go/kafka"
+	"os"
 
 	//    "gopkg.in/yaml.v2"
 	log "github.com/sirupsen/logrus"
@@ -66,7 +69,6 @@ func main() {
 
 	// test metric
 	//influxdbWriteAPI := influxdbUtil.NewWriteAPI(influxdbClient, conf.Influxdb.Org, conf.Influxdb.Bucket)
-
 	// collect
 	// cpuStats := cpu.NewCPUStats()
 	// times, _ := cpu.CollectCPUTimes()
@@ -92,6 +94,55 @@ func main() {
 		Addr: "localhost:55555",
 	}
 	agent := agent.NewAgent(agentConf)
+
+	//TODO：ADDED
+	// Connect to Kafka
+	kafkaBroker := "localhost:9092" // Replace with your Kafka broker(s) address
+	kafkaGroupId := "agent-group"   // You may use a unique name for your agent group
+	kafkaTopic := "agent-config"
+
+	consumer, err := kafka.NewConsumer(&kafka.ConfigMap{
+		"bootstrap.servers": kafkaBroker,
+		"group.id":          kafkaGroupId,
+		"auto.offset.reset": "earliest",
+	})
+
+	if err != nil {
+		log.Fatalf("Failed to create Kafka consumer: %v", err)
+		os.Exit(1)
+	}
+
+	defer consumer.Close()
+
+	// Subscribe to the configuration topic
+	err = consumer.Subscribe(kafkaTopic, nil)
+	if err != nil {
+		log.Fatalf("Failed to subscribe to topic '%s': %v", kafkaTopic, err)
+		os.Exit(1)
+	}
+
+	// Start listening for configuration updates
+	go func() {
+		for {
+			msg, err := consumer.ReadMessage(-1)
+			if err != nil {
+				log.Errorf("Failed to read message from Kafka: %v", err)
+				continue
+			}
+
+			newConf := &agent.AgentConf{}
+			err = json.Unmarshal(msg.Value, newConf)
+			if err != nil {
+				log.Errorf("Failed to unmarshal configuration: %v", err)
+				continue
+			}
+
+			agent.UpdateConfig(newConf)
+			log.Infof("Updated agent configuration: %v", newConf)
+		}
+	}()
+	//ADDED end
+
 	quit := make(chan bool)
 	defer func() {
 		quit <- true // TODO need waitgroup to make sure the quit procedure is done,
