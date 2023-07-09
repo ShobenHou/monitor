@@ -1,7 +1,8 @@
 package api
 
 import (
-	"github.com/ShobenHou/monitor/pkg/kafka"
+	"fmt"
+	kafkaHelper "github.com/ShobenHou/monitor/internal/pkg/kafka"
 	"github.com/gin-gonic/gin"
 )
 
@@ -22,31 +23,31 @@ func GetMonitorConfig(c *gin.Context) {
 
 // This is actually s.handleConfigUpdate()
 func (s *Server) UpdateMonitorConfig(c *gin.Context) {
-	agentID := c.Param("id")
-
-	var monitorConf MonitorConf
+	//1. get config from user PUT method
+	//2. store it in DB
+	//3. update config to agents
+	var monitorConf kafkaHelper.MonitorConf
 	err := c.BindJSON(&monitorConf)
 	if err != nil {
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
 
-	err = updateMonitorConfigInDB(agentID, monitorConf) // TODO: Replace this with your own logic to update the configuration in the database.
+	//TODO:err = updateMonitorConfigInDB(monitorConf) // TODO: add agentID
 
-	//1. get config from user PUT method
-	//2. store it in DB
-	//3. update config to agents
-
+	//TODO: use logger instead of print
+	fmt.Printf("MonitorConf from /config/update PUT: %+v\n", monitorConf)
 	if err != nil {
 		c.JSON(500, gin.H{"error": err.Error()})
 		return
 	}
 
-	err = kafka.PublishConfigToKafka(agentID, monitorConf)
+	err = kafkaHelper.PublishConfigToKafka(monitorConf) //TODO: add agentID
 	if err != nil {
 		c.JSON(500, gin.H{"error": err.Error()})
 		return
 	}
 
 	c.JSON(200, gin.H{"message": "Configuration updated successfully."})
+	fmt.Printf("Configuration updated to kafka successfully.")
 }

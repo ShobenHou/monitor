@@ -13,6 +13,7 @@ import (
 
 	"github.com/ShobenHou/monitor/internal/agent"
 	"github.com/ShobenHou/monitor/internal/pkg/influxdb"
+	kafkaHelper "github.com/ShobenHou/monitor/internal/pkg/kafka"
 	"github.com/ShobenHou/monitor/internal/pkg/logger"
 	//"github.com/githubzjm/tuo/internal/agent/plugin"
 	// "github.com/githubzjm/tuo/internal/agent/config"
@@ -130,7 +131,7 @@ func main() {
 				continue
 			}
 
-			newConf := &agent.AgentConf{}
+			newConf := &kafkaHelper.MonitorConf{}
 			err = json.Unmarshal(msg.Value, newConf)
 			if err != nil {
 				log.Errorf("Failed to unmarshal configuration: %v", err)

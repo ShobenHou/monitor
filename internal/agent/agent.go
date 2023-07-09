@@ -2,6 +2,7 @@ package agent
 
 import (
 	"fmt"
+	kafkaHelper "github.com/ShobenHou/monitor/internal/pkg/kafka"
 	"github.com/ShobenHou/monitor/internal/pkg/metrics"
 	_ "github.com/ShobenHou/monitor/internal/pkg/metrics/all"
 	"time"
@@ -45,8 +46,13 @@ func NewAgent(conf *AgentConf) *Agent {
 	}
 }
 
-func (a *Agent) UpdateConfig(newConf *AgentConf) { // TODO:ADDED
-	a.Conf = newConf
+func (a *Agent) UpdateConfig(newConf *kafkaHelper.MonitorConf) { // TODO:ADDED
+	//newAgentConf := &AgentConf{Interval: newConf.MonitorInterval, Metrics: newConf.MonitorMetrics, Addr: a.Conf.Addr}
+	a.Conf.Interval = newConf.MonitorInterval
+
+	a.Conf.Metrics = newConf.MonitorMetrics
+	//a.Conf = newAgentConf //TODO: map MonitorConfig values to AgentConf Values
+
 	a.restart <- true
 }
 
