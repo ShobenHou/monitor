@@ -99,7 +99,7 @@ func main() {
 	// Connect to Kafka
 	kafkaBroker := "localhost:9092" // Replace with your Kafka broker(s) address
 	kafkaGroupId := "agent-group"   // You may use a unique name for your agent group
-	kafkaTopic := "agent-config"
+	kafkaTopic := "monitoring_configurations"
 
 	consumer, err := kafka.NewConsumer(&kafka.ConfigMap{
 		"bootstrap.servers": kafkaBroker,
