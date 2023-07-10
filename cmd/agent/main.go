@@ -37,6 +37,7 @@ func init() {
 }
 
 func main() {
+	fmt.Println("Start")
 	var err error
 	var isUp bool
 
@@ -86,7 +87,7 @@ func main() {
 
 	// init agent
 	agentConf := &agent.AgentConf{
-		Interval: "1s",
+		Interval: "5s",
 		Metrics: []string{
 			"cpu",
 			"mem",
@@ -99,7 +100,7 @@ func main() {
 	//TODO：ADDED
 	// Connect to Kafka
 	kafkaBroker := "localhost:9092" // Replace with your Kafka broker(s) address
-	kafkaGroupId := "agent-group"   // You may use a unique name for your agent group
+	kafkaGroupId := "my-group"      // You may use a unique name for your agent group
 	kafkaTopic := "monitoring_configurations"
 
 	consumer, err := kafka.NewConsumer(&kafka.ConfigMap{
@@ -125,19 +126,20 @@ func main() {
 	// Start listening for configuration updates
 	go func() {
 		for {
+			fmt.Println("Listening to kafka")
 			msg, err := consumer.ReadMessage(-1)
 			if err != nil {
 				log.Errorf("Failed to read message from Kafka: %v", err)
 				continue
 			}
-
+			fmt.Println("Got message")
 			newConf := &kafkaHelper.MonitorConf{}
 			err = json.Unmarshal(msg.Value, newConf)
 			if err != nil {
 				log.Errorf("Failed to unmarshal configuration: %v", err)
 				continue
 			}
-
+			fmt.Printf("Received monitoring configuration: %+v\n", newConf)
 			agentInstance.UpdateConfig(newConf)
 			log.Infof("Updated agent configuration: %v", newConf)
 		}

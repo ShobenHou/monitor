@@ -24,7 +24,8 @@ type AgentConf struct {
 func NewAgent(conf *AgentConf) *Agent {
 	if conf != nil {
 		return &Agent{
-			Conf: conf,
+			Conf:    conf,
+			restart: make(chan bool),
 		}
 	} else {
 		return &Agent{
@@ -42,6 +43,7 @@ func NewAgent(conf *AgentConf) *Agent {
 				},
 				Addr: "localhost:55555",
 			},
+			restart: make(chan bool),
 		}
 	}
 }
@@ -52,8 +54,16 @@ func (a *Agent) UpdateConfig(newConf *kafkaHelper.MonitorConf) { // TODO:ADDED
 
 	a.Conf.Metrics = newConf.MonitorMetrics
 	//a.Conf = newAgentConf //TODO: map MonitorConfig values to AgentConf Values
+	fmt.Println("Restarting")
 
-	a.restart <- true
+	timeout := time.After(5 * time.Second) // 设置超时时间为3秒
+	select {
+	case a.restart <- true: // 尝试写入管道
+		fmt.Println("Writing restart success")
+	case <-timeout: // 超时处理
+		fmt.Println("Writing resetart failed")
+	}
+
 }
 
 /*
@@ -110,18 +120,7 @@ func (a *Agent) Run(quit chan bool) error {
 	defer ticker.Stop()
 	for {
 		select {
-		case <-ticker.C:
-			for _, m := range a.Conf.Metrics {
-				creator, ok := metrics.MetricCreators[m]
-				if !ok {
-					return fmt.Errorf("metric %s is illegal", m)
-				}
-				metric := creator()
-				if err := metric.Gather(acc); err != nil {
-					log.Infof("gather error: %v", err)
-				}
-			}
-		case <-a.restart: //TODO: added
+		case <-a.restart:
 			log.Info("Restarting data collection and reporting goroutines")
 			ticker.Stop()
 			acc.Close()
@@ -138,6 +137,18 @@ func (a *Agent) Run(quit chan bool) error {
 				return err
 			}
 			ticker = time.NewTicker(interval)
+
+		case <-ticker.C:
+			for _, m := range a.Conf.Metrics {
+				creator, ok := metrics.MetricCreators[m]
+				if !ok {
+					return fmt.Errorf("metric %s is illegal", m)
+				}
+				metric := creator()
+				if err := metric.Gather(acc); err != nil {
+					log.Infof("gather error: %v", err)
+				}
+			}
 
 		case <-quit:
 			log.Info("agent collect loop quit")

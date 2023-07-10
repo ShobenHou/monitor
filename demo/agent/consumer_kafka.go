@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	kafkaHelper "github.com/ShobenHou/monitor/internal/pkg/kafka"
 	"github.com/confluentinc/confluent-kafka-go/kafka"
 	"github.com/influxdata/influxdb-client-go/v2"
 	"log"
@@ -66,7 +67,7 @@ func main() {
 				continue
 			}
 
-			var config MonitoringConfig
+			var config kafkaHelper.MonitorConf
 			err = json.Unmarshal(msg.Value, &config)
 			if err != nil {
 				log.Printf("Failed to parse monitoring configuration message: %v", err)
