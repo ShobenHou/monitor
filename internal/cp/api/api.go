@@ -18,6 +18,7 @@ func NewServer(agent *agent.Agent) *Server {
 	s.Router.Use(s.logRequest)
 
 	//router.GET("/agents/:id/config", GetMonitorConfig)
+	s.Router.GET("/hello", s.HandleHello)
 	s.Router.PUT("/config/update", s.UpdateMonitorConfig) //TODO: "agents/:id/config/update"
 
 	return s
