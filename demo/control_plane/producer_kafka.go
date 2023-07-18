@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	kafkaHelper "github.com/ShobenHou/monitor/internal/pkg/kafka"
 	"github.com/confluentinc/confluent-kafka-go/kafka"
 	"log"
 	"time"
@@ -29,9 +30,16 @@ func main() {
 
 	// Loop through the ticker ticks and generate monitoring configuration messages
 	for range ticker.C {
-		config := MonitoringConfig{
-			MonitoringItems:  []string{"cpu", "memory", "disk"},
-			CollectionPeriod: 30 * time.Second,
+		/*
+			config := MonitoringConfig{
+				MonitoringItems:  []string{"cpu", "mem"},
+				CollectionPeriod: 30 * time.Second,
+			}
+
+		*/
+		config := kafkaHelper.MonitorConf{
+			MonitorMetrics:  []string{"mem", "host"},
+			MonitorInterval: "2s",
 		}
 
 		// Convert the monitoring configuration to JSON
@@ -51,6 +59,7 @@ func main() {
 			continue
 		}
 		fmt.Print(fmt.Printf("Sent monitoring configuration: %+v\n", config))
+		break //DEBUG
 	}
 
 }

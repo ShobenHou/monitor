@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	kafkaHelper "github.com/ShobenHou/monitor/internal/pkg/kafka"
 	"github.com/confluentinc/confluent-kafka-go/kafka"
 	"github.com/influxdata/influxdb-client-go/v2"
 	"log"
@@ -66,7 +67,7 @@ func main() {
 				continue
 			}
 
-			var config MonitoringConfig
+			var config kafkaHelper.MonitorConf
 			err = json.Unmarshal(msg.Value, &config)
 			if err != nil {
 				log.Printf("Failed to parse monitoring configuration message: %v", err)
@@ -74,34 +75,6 @@ func main() {
 			}
 			// Output the monitoring configuration to standard output
 			fmt.Printf("Received monitoring configuration: %+v\n", config)
-
-			/*
-				// Set up a ticker to collect monitoring data periodically
-				ticker := time.NewTicker(config.CollectionPeriod)
-				defer ticker.Stop()
-
-				// Loop through the ticker ticks and collect monitoring data
-					for range ticker.C {
-						// Collect the monitoring data for the specified monitoring items
-						var data map[string]interface{}
-						for _, item := range config.MonitoringItems {
-							// Collect the monitoring data for the item
-							// (omitted for brevity)
-							data[item] = 42 // Example value
-
-							// Insert the monitoring data into InfluxDB
-							writeAPI := influxClient.WriteAPI("my-org", "my-bucket")
-							p := influxdb2.NewPoint(
-								"monitoring",
-								map[string]string{"item": item},
-								data,
-								time.Now(),
-							)
-							writeAPI.WritePoint(p)
-							writeAPI.Flush()
-						}
-					}
-			*/
 
 			// Commit the Kafka message offset to mark it as processed
 			if _, err := c.CommitMessage(msg); err != nil {

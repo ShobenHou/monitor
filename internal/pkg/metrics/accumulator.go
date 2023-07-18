@@ -41,6 +41,8 @@ func (acc *Accumulator) Close() {
 func (acc *Accumulator) Report(threads int) {
 	var wg sync.WaitGroup
 	// Launch write routines
+	time.Sleep(1 * time.Second)
+	log.Info("report routines launching")
 	for t := 0; t < threads; t++ {
 		wg.Add(1)
 		go func() {

@@ -2,14 +2,13 @@ package kafka
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/confluentinc/confluent-kafka-go/kafka"
-	"time"
 )
 
 type MonitorConf struct {
-	// TODO: different from AgentConf in internal/agent/agent.go
-	MonitorMetrics  []string      `json:"monitor_metrics"`
-	MonitorInterval time.Duration `json:"monitor_interval"`
+	MonitorMetrics  []string `json:"monitor_metrics"`
+	MonitorInterval string   `json:"monitor_interval"`
 }
 
 var kafkaProducer *kafka.Producer
@@ -23,22 +22,23 @@ func init() {
 	}
 }
 
-func PublishConfigToKafka(agentID string, monitorConf MonitorConf) error {
+func PublishConfigToKafka(monitorConf MonitorConf) error {
 	monitorConfJSON, err := json.Marshal(monitorConf)
 	if err != nil {
 		return err
 	}
 
-	kafkaTopic := "agent-config"
+	kafkaTopic := "monitoring_configurations"
 	msg := &kafka.Message{
 		TopicPartition: kafka.TopicPartition{Topic: &kafkaTopic, Partition: kafka.PartitionAny},
-		Key:            []byte(agentID),
-		Value:          monitorConfJSON,
+		//TODO: Key:            []byte(agentID),
+		Value: monitorConfJSON,
 	}
 
 	deliveryChan := make(chan kafka.Event)
 	defer close(deliveryChan)
 
+	fmt.Printf("PublishConfigToKafka--Producing MonitorConfig to topic:%s\n", msg.TopicPartition.Topic)
 	err = kafkaProducer.Produce(msg, deliveryChan)
 	if err != nil {
 		return err
