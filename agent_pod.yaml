@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Pod
+metadata:
+  name: agent
+spec:
+  containers:
+  - name: agent
+    image: us-central1-docker.pkg.dev/practical-case-392912/monitor-agent/agent:latest
+    resources:
+      requests:
+        memory: "200Mi"
+        cpu: "100m"
+        ephemeral-storage: "300Mi"
+      limits:
+        memory: "200Mi"
+        cpu: "100m"
+        ephemeral-storage: "300Mi"
+    volumeMounts:
+    - mountPath: /host/sys
+      mountPropagation: HostToContainer
+      name: sys
+      readOnly: true
+    - mountPath: /host/proc
+      mountPropagation: HostToContainer
+      name: proc
+      readOnly: true
+    - mountPath: /host/etc
+      mountPropagation: HostToContainer
+      name: etc
+      readOnly: true
+    - mountPath: /host/dev
+      mountPropagation: HostToContainer
+      name: dev
+      readOnly: true
+    - mountPath: /host/root
+      mountPropagation: HostToContainer
+      name: root
+      readOnly: true
+    - mountPath: /host/var
+      mountPropagation: HostToContainer
+      name: var
+      readOnly: true
+    - mountPath: /host/run
+      mountPropagation: HostToContainer
+      name: run
+      readOnly: true
+  volumes:
+  - hostPath:
+      path: /sys
+    name: sys
+  - hostPath:
+      path: /proc
+    name: proc
+  - hostPath:
+      path: /etc
+    name: etc
+  - hostPath:
+      path: /dev
+    name: dev
+  - hostPath:
+      path: /
+    name: root
+  - hostPath:
+      path: /var
+    name: var
+  - hostPath:
+      path: /run
+    name: run
+---
