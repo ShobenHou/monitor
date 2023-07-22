@@ -77,7 +77,10 @@ func main() {
 	// m, _ := cpu.TimesStatToMap(times)
 
 	// init influxdb
-	influxdb.InitDB("http://127.0.0.1:8086", "init-token", "init-org", "init-bucket")
+
+	//influxdb.InitDB("http://127.0.0.1:8086", "init-token", "init-org", "init-bucket")
+	//CONTAINER_TRANS
+	influxdb.InitDB("http://my-release-influxdb2", "8hEh2d7Tg0WDWCFyN0WtCYl87f4HGANE", "influxdata", "default")
 	defer influxdb.Close()
 	if isUp, err = influxdb.Client.Ping(context.Background()); err != nil {
 		log.Fatalf("ping influxdb failed: %v", err)
@@ -97,6 +100,7 @@ func main() {
 	}
 	agentInstance := agent.NewAgent(agentConf)
 
+	/*TEST CONTAINER_TRANS 
 	//TODO：ADDED
 	// Connect to Kafka
 	kafkaBroker := "localhost:9092" // Replace with your Kafka broker(s) address
@@ -145,7 +149,7 @@ func main() {
 		}
 	}()
 	//ADDED end
-
+	*/
 	quit := make(chan bool)
 	defer func() {
 		quit <- true // TODO need waitgroup to make sure the quit procedure is done,
