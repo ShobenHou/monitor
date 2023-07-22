@@ -15,19 +15,6 @@
 # Use the offical Golang image to create a build artifact.
 # This is based on Debian and sets the GOPATH to /go.
 # https://hub.docker.com/_/golang
-FROM golang:1.19.2 as builder
-WORKDIR /app
-
-# Initialize a new Go module.
-RUN go mod init agent
-RUN go mod tidy
-
-# Copy local code to the container image.
-# TODO: Copy all src files
-COPY . ./
-
-# Build the command inside the container.
-RUN CGO_ENABLED=0 GOOS=linux go build -o /agent ./cmd/agent/main.go
 
 # Use a Docker multi-stage build to create a lean production image.
 # https://docs.docker.com/develop/develop-images/multistage-build/#use-multi-stage-builds
@@ -37,8 +24,7 @@ FROM alpine:latest
 # Change the working directory.
 WORKDIR /
 
-# Copy the binary to the production image from the builder stage.
-COPY --from=builder /agent /agent
+COPY ./cmd/agent/agent /agent
 #COPY --from=busybox:1.35.0-uclibc /bin/sh /bin/sh
 
 # Run the web service on container startup.
