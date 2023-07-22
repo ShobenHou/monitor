@@ -20,6 +20,7 @@ WORKDIR /app
 
 # Initialize a new Go module.
 RUN go mod init agent
+RUN go mod tidy
 
 # Copy local code to the container image.
 # TODO: Copy all src files
