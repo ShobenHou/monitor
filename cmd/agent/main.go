@@ -2,18 +2,18 @@ package main
 
 import (
 	"context"
-	"encoding/json"
+	//"encoding/json"
 	"flag"
 	"fmt"
-	"github.com/confluentinc/confluent-kafka-go/kafka"
-	"os"
+	//"github.com/confluentinc/confluent-kafka-go/kafka"
+	//"os"
 
 	//    "gopkg.in/yaml.v2"
 	log "github.com/sirupsen/logrus"
 
 	"github.com/ShobenHou/monitor/internal/agent"
 	"github.com/ShobenHou/monitor/internal/pkg/influxdb"
-	kafkaHelper "github.com/ShobenHou/monitor/internal/pkg/kafka"
+	//kafkaHelper "github.com/ShobenHou/monitor/internal/pkg/kafka"
 	"github.com/ShobenHou/monitor/internal/pkg/logger"
 	//"github.com/githubzjm/tuo/internal/agent/plugin"
 	// "github.com/githubzjm/tuo/internal/agent/config"
@@ -100,7 +100,7 @@ func main() {
 	}
 	agentInstance := agent.NewAgent(agentConf)
 
-	/*TEST CONTAINER_TRANS 
+	/*TEST CONTAINER_TRANS
 	//TODO：ADDED
 	// Connect to Kafka
 	kafkaBroker := "localhost:9092" // Replace with your Kafka broker(s) address
