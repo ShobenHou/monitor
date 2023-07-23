@@ -1,33 +1,20 @@
-# Copyright 2022 Google LLC
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+# 使用Golang基础镜像
+FROM golang:1.19.2 AS builder
 
-# Use the offical Golang image to create a build artifact.
-# This is based on Debian and sets the GOPATH to /go.
-# https://hub.docker.com/_/golang
+# 设置工作目录
+WORKDIR /go/src/app
 
-# Use a Docker multi-stage build to create a lean production image.
-# https://docs.docker.com/develop/develop-images/multistage-build/#use-multi-stage-builds
-#FROM gcr.io/distroless/base-debian11
-FROM alpine:latest
+# 拷贝项目代码到镜像中
+COPY . .
 
-# Change the working directory.
-WORKDIR /
+#依赖下载
+RUN go mod init github.com/ShobenHou/monitor
+RUN go mod tidy
+RUN go mod download
 
-COPY ./cmd/agent/agent /agent
-#COPY --from=busybox:1.35.0-uclibc /bin/sh /bin/sh
+# ENV CGO_ENABLED=0
+# 编译Golang代码
+RUN go build -o agent /go/src/app/cmd/agent/main.go
 
-# Run the web service on container startup.
-#USER nonroot:nonroot
-#ENTRYPOINT ["/bin/sh", "/agent"]
-ENTRYPOINT ["/agent"]
+# 设置启动命令
+CMD ["/go/src/app/agent"]
