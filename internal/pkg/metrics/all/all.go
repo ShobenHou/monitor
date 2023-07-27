@@ -7,4 +7,5 @@ import (
 	_ "github.com/ShobenHou/monitor/internal/pkg/metrics/heartbeat"
 	_ "github.com/ShobenHou/monitor/internal/pkg/metrics/host"
 	_ "github.com/ShobenHou/monitor/internal/pkg/metrics/mem"
+	_ "github.com/ShobenHou/monitor/internal/pkg/metrics/processes"
 )

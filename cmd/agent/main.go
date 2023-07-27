@@ -92,6 +92,7 @@ func main() {
 			"cpu",
 			"mem",
 			"host",
+			"processes",
 		},
 		Addr: "localhost:55555",
 	}
