@@ -17,6 +17,8 @@ spec:
       containers:
       - name: agent
         image: us-central1-docker.pkg.dev/practical-case-392912/monitor-agent/agent:latest
+        securityContext:
+            privileged: true # 授予容器特权，可以访问其他进程的信息
         env:
         - name: TZ
           value: "Asia/Shanghai" # 设置时区为上海时区
