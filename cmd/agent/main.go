@@ -100,16 +100,25 @@ func main() {
 	}
 	agentInstance := agent.NewAgent(agentConf)
 
-	//TODO：ADDED
+
 	// Connect to Kafka
+	kafkaGroupEnv := os.Getenv("KAFKA_GROUP_ID")
+	if kafkaGroupEnv == "" {
+		// 如果KAFKA_GROUP_ID未定义，则设置为默认值
+		kafkaGroupEnv = "default-group"
+		fmt.Println("WARNING: didn't defined the KAFKA_GROUP_ID")
+	}
+
+    fmt.Println("Kafka Group ID:", kafkaGroupEnv)
+
 	kafkaBroker := "kafka:9092" // Replace with your Kafka broker(s) address
-	kafkaGroupId := "my-group"      // You may use a unique name for your agent group
+	kafkaGroupId := kafkaGroupEnv      // You may use a unique name for your agent group
 	kafkaTopic := "monitoring_configurations"
 
 	consumer, err := kafka.NewConsumer(&kafka.ConfigMap{
 		"bootstrap.servers": kafkaBroker,
 		"group.id":          kafkaGroupId,
-		"auto.offset.reset": "earliest",
+		"auto.offset.reset": "latest",
 	})
 
 	if err != nil {
