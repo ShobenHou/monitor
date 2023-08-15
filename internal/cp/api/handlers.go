@@ -10,8 +10,7 @@ import (
 // This is actually s.handleConfigUpdate()
 func (s *Server) UpdateMonitorConfig(c *gin.Context) {
 	//1. get config from user PUT method
-	//2. store it in DB
-	//3. update config to agents
+	//2. update config to agents through kafka
 	var monitorConf kafkaHelper.MonitorConf
 	err := c.BindJSON(&monitorConf)
 	if err != nil {
