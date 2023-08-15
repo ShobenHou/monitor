@@ -3,7 +3,7 @@ package processes
 import (
 	"context"
 	"time"
-
+	"os"
 	"fmt"
 	"github.com/ShobenHou/monitor/internal/pkg/metrics"
 
@@ -31,7 +31,7 @@ func (c *ProcStats) Gather(acc *metrics.Accumulator) error {
 		fields := make(map[string]interface{})
 		tags := map[string]string{
 			"pid":  fmt.Sprintf("%d", p.Pid),
-			"host": acc.Uid,
+			"node": os.Getenv("MY_NODE_NAME"),
 		}
 		// CPU Percent
 		cpuPercent, err := p.CPUPercentWithContext(context.Background())

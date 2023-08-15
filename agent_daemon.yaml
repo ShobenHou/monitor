@@ -20,6 +20,10 @@ spec:
         securityContext:
             privileged: true # 授予容器特权，可以访问其他进程的信息
         env:
+        - name: MY_NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
         - name: TZ
           value: "Asia/Shanghai" # 设置时区为上海时区
         - name: KAFKA_GROUP_ID

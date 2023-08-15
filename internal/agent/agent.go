@@ -40,6 +40,8 @@ func NewAgent(conf *AgentConf) *Agent {
 					"processes",
 					"disk",
 					"diskio",
+					"load",
+					"net",
 				},
 				Addr: "localhost:55555",
 			},

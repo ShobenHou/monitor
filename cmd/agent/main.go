@@ -90,17 +90,16 @@ func main() {
 
 	// init agent
 	agentConf := &agent.AgentConf{
-		Interval: "5s",
+		Interval: "100ms",
 		Metrics: []string{
 			"cpu",
 			"mem",
 			"host",
-			"processes",
+			"load",
 		},
 		Addr: "localhost:55555",
 	}
 	agentInstance := agent.NewAgent(agentConf)
-
 
 	// Connect to Kafka
 	kafkaGroupEnv := os.Getenv("KAFKA_GROUP_ID")
@@ -110,10 +109,10 @@ func main() {
 		fmt.Println("WARNING: didn't defined the KAFKA_GROUP_ID")
 	}
 
-    fmt.Println("Kafka Group ID:", kafkaGroupEnv)
+	fmt.Println("Kafka Group ID:", kafkaGroupEnv)
 
-	kafkaBroker := "kafka:9092" // Replace with your Kafka broker(s) address
-	kafkaGroupId := kafkaGroupEnv      // You may use a unique name for your agent group
+	kafkaBroker := "kafka:9092"   // Replace with your Kafka broker(s) address
+	kafkaGroupId := kafkaGroupEnv // You may use a unique name for your agent group
 	kafkaTopic := "monitoring_configurations"
 
 	consumer, err := kafka.NewConsumer(&kafka.ConfigMap{

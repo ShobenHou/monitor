@@ -3,7 +3,7 @@ package cpu
 import (
 	"strconv"
 	"time"
-
+	"os"
 	"github.com/ShobenHou/monitor/internal/pkg/metrics"
 
 	"github.com/ShobenHou/monitor/internal/pkg/utils/json"
@@ -46,7 +46,7 @@ func (c *CPUStats) Gather(acc *metrics.Accumulator) error {
 	for _, info := range infos {
 		acc.Add(measurement, map[string]string{
 			"cpu":  info.CPU,
-			"host": acc.Uid,
+			"node": os.Getenv("MY_NODE_NAME"),
 		}, json.StructToMap(info), now)
 	}
 
@@ -59,7 +59,7 @@ func (c *CPUStats) Gather(acc *metrics.Accumulator) error {
 	for _, percent := range percents {
 		acc.Add(measurement, map[string]string{
 			"cpu":  percent.CPU,
-			"host": acc.Uid,
+			"node": os.Getenv("MY_NODE_NAME"),
 		}, json.StructToMap(percent), now)
 	}
 
@@ -72,7 +72,7 @@ func (c *CPUStats) Gather(acc *metrics.Accumulator) error {
 	for _, time := range times {
 		acc.Add(measurement, map[string]string{
 			"cpu":  time.CPU,
-			"host": acc.Uid,
+			"node": os.Getenv("MY_NODE_NAME"),
 		}, json.StructToMap(time), now)
 	}
 
