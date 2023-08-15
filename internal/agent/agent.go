@@ -40,6 +40,8 @@ func NewAgent(conf *AgentConf) *Agent {
 					"processes",
 					"disk",
 					"diskio",
+					"load",
+					"net",
 				},
 				Addr: "localhost:55555",
 			},
@@ -66,41 +68,9 @@ func (a *Agent) UpdateConfig(newConf *kafkaHelper.MonitorConf) { // TODO:ADDED
 
 }
 
-/*
-func (a *Agent) subscribeKafka(kafkaAddr, topic string, updateConfig func(*AgentConf)) {//TODO：ADDED
-	r := kafka.NewReader(kafka.ReaderConfig{
-		Brokers:   []string{kafkaAddr},
-		Topic:     topic,
-		Partition: 0,
-		MinBytes:  10e3,
-		MaxBytes:  10e6,
-	})
-
-	for {
-		m, err := r.ReadMessage(context.Background())
-		if err != nil {
-			log.Errorf("Error reading message from Kafka: %v", err)
-			continue
-		}
-
-		var newConf AgentConf
-		if err := json.Unmarshal(m.Value, &newConf); err != nil {
-			log.Errorf("Error unmarshalling Kafka message: %v", err)
-			continue
-		}
-
-		updateConfig(&newConf)
-		log.Infof("Updated configuration: %v", newConf)
-	}
-}
-*/
-
 func (a *Agent) Run(quit chan bool) error {
 	var err error
 	var interval time.Duration
-
-	// Add the following line to start the Kafka subscription goroutine
-	//go a.subscribeKafka("localhost:9092", "agent-config", a.UpdateConfig) //TODO: ADDED//放的位置不一定对
 
 	acc, err := metrics.NewAccumulator(100)
 	if err != nil {

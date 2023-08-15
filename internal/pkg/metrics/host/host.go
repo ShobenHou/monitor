@@ -2,7 +2,7 @@ package host
 
 import (
 	"time"
-
+	"os"
 	"github.com/ShobenHou/monitor/internal/pkg/metrics"
 	"github.com/ShobenHou/monitor/internal/pkg/utils/json"
 )
@@ -27,6 +27,7 @@ func (h *HostStats) Gather(acc *metrics.Accumulator) error {
 	}
 	acc.Add(measurement, map[string]string{
 		"host": acc.Uid,
+		"node": os.Getenv("MY_NODE_NAME"),
 	}, json.StructToMap(info), now)
 
 	return nil

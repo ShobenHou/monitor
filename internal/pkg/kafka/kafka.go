@@ -16,7 +16,7 @@ var kafkaProducer *kafka.Producer
 func init() {
 	// Initialize the Kafka producer.
 	var err error
-	kafkaProducer, err = kafka.NewProducer(&kafka.ConfigMap{"bootstrap.servers": "localhost:9092"})
+	kafkaProducer, err = kafka.NewProducer(&kafka.ConfigMap{"bootstrap.servers": "kafka:9092"})
 	if err != nil {
 		panic(err)
 	}

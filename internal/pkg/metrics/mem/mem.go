@@ -2,7 +2,7 @@ package mem
 
 import (
 	"time"
-
+	"os"
 	"github.com/ShobenHou/monitor/internal/pkg/metrics"
 	"github.com/ShobenHou/monitor/internal/pkg/utils/json"
 )
@@ -27,7 +27,7 @@ func (m *MemStats) Gather(acc *metrics.Accumulator) error {
 		return err
 	}
 	acc.Add(measurement, map[string]string{
-		"host": acc.Uid,
+		"node": os.Getenv("MY_NODE_NAME"),
 	}, json.StructToMap(swap), now)
 
 	// Virtual mem
@@ -37,7 +37,7 @@ func (m *MemStats) Gather(acc *metrics.Accumulator) error {
 		return err
 	}
 	acc.Add(measurement, map[string]string{
-		"host": acc.Uid,
+		"node": os.Getenv("MY_NODE_NAME"),
 	}, json.StructToMap(virtual), now)
 
 	return nil

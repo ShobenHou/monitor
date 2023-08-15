@@ -16,7 +16,7 @@ type MonitoringConfig struct {
 
 func main() {
 	// Set up the Kafka producer
-	p, err := kafka.NewProducer(&kafka.ConfigMap{"bootstrap.servers": "localhost:9092"})
+	p, err := kafka.NewProducer(&kafka.ConfigMap{"bootstrap.servers": "kafka:9092"})
 	if err != nil {
 		log.Fatalf("Failed to create Kafka producer: %v", err)
 	}

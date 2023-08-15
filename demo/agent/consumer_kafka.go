@@ -19,11 +19,11 @@ type MonitoringConfig struct {
 
 func main() {
 	// Set up the InfluxDB client
-	influxClient := influxdb2.NewClient("http://localhost:8086", "my-token")
+	influxClient := influxdb2.NewClient("http://my-release-influxdb2:8086", "my-token")
 	defer influxClient.Close()
 
 	// Set up the Kafka producer
-	p, err := kafka.NewProducer(&kafka.ConfigMap{"bootstrap.servers": "localhost:9092"})
+	p, err := kafka.NewProducer(&kafka.ConfigMap{"bootstrap.servers": "kafka:9092"})
 	if err != nil {
 		log.Fatalf("Failed to create Kafka producer: %v", err)
 	}
@@ -31,7 +31,7 @@ func main() {
 
 	// Set up the Kafka consumer
 	c, err := kafka.NewConsumer(&kafka.ConfigMap{
-		"bootstrap.servers":  "localhost:9092",
+		"bootstrap.servers":  "kafka:9092",
 		"group.id":           "my-group",
 		"auto.offset.reset":  "earliest",
 		"enable.auto.commit": false,

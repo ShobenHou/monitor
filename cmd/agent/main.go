@@ -77,7 +77,10 @@ func main() {
 	// m, _ := cpu.TimesStatToMap(times)
 
 	// init influxdb
-	influxdb.InitDB("http://127.0.0.1:8086", "init-token", "init-org", "init-bucket")
+
+	//influxdb.InitDB("http://127.0.0.1:8086", "init-token", "init-org", "init-bucket")
+	//CONTAINER_TRANS
+	influxdb.InitDB("http://my-release-influxdb2", "8hEh2d7Tg0WDWCFyN0WtCYl87f4HGANE", "influxdata", "default")
 	defer influxdb.Close()
 	if isUp, err = influxdb.Client.Ping(context.Background()); err != nil {
 		log.Fatalf("ping influxdb failed: %v", err)
@@ -87,27 +90,35 @@ func main() {
 
 	// init agent
 	agentConf := &agent.AgentConf{
-		Interval: "5s",
+		Interval: "100ms",
 		Metrics: []string{
 			"cpu",
 			"mem",
 			"host",
-			"processes",
+			"load",
 		},
 		Addr: "localhost:55555",
 	}
 	agentInstance := agent.NewAgent(agentConf)
 
-	//TODO：ADDED
 	// Connect to Kafka
-	kafkaBroker := "localhost:9092" // Replace with your Kafka broker(s) address
-	kafkaGroupId := "my-group"      // You may use a unique name for your agent group
+	kafkaGroupEnv := os.Getenv("KAFKA_GROUP_ID")
+	if kafkaGroupEnv == "" {
+		// 如果KAFKA_GROUP_ID未定义，则设置为默认值
+		kafkaGroupEnv = "default-group"
+		fmt.Println("WARNING: didn't defined the KAFKA_GROUP_ID")
+	}
+
+	fmt.Println("Kafka Group ID:", kafkaGroupEnv)
+
+	kafkaBroker := "kafka:9092"   // Replace with your Kafka broker(s) address
+	kafkaGroupId := kafkaGroupEnv // You may use a unique name for your agent group
 	kafkaTopic := "monitoring_configurations"
 
 	consumer, err := kafka.NewConsumer(&kafka.ConfigMap{
 		"bootstrap.servers": kafkaBroker,
 		"group.id":          kafkaGroupId,
-		"auto.offset.reset": "earliest",
+		"auto.offset.reset": "latest",
 	})
 
 	if err != nil {
@@ -145,7 +156,6 @@ func main() {
 			log.Infof("Updated agent configuration: %v", newConf)
 		}
 	}()
-	//ADDED end
 
 	quit := make(chan bool)
 	defer func() {
