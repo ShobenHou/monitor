@@ -7,21 +7,6 @@ import (
 	"net/http"
 )
 
-/*--------------old code-------------------------
-func GetMonitorConfig(c *gin.Context) {
-	agentID := c.Param("id")
-
-	monitorConfig, err := getMonitorConfigFromDB(agentID) // TODO:Replace this with your own logic to get the configuration from the database.
-	//the user get agent config(that is running) from database
-
-	if err != nil {
-		c.JSON(500, gin.H{"error": err.Error()})
-		return
-	}
-	c.JSON(200, monitorConfig)
-}
-*/
-
 // This is actually s.handleConfigUpdate()
 func (s *Server) UpdateMonitorConfig(c *gin.Context) {
 	//1. get config from user PUT method
